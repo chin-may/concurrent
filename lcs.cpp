@@ -11,10 +11,12 @@ inline int get(int** a,int i, int j){
         return 0;
 }
 
-int p_lcs(string a, string b, int n1, int n2){
+int p_lcs(string a, string b, int n1, int n2, char* res){
     int** tab = new int*[n1];
+    int** path = new int*[n1];
     for(int i=0; i<n1; i++){
         tab[i] = new int[n2];
+        path[i] = new int[n2];
     }
     int iter = 1;
     int ns = 1;
@@ -32,11 +34,20 @@ int p_lcs(string a, string b, int n1, int n2){
             }
             if(a[i]==b[j]){
                 tab[i][j] = get(tab,i-1,j-1) + 1;
+                path[i][j] = 2;
                 //cout<<a[i];
                 //cout<<i<<" "<<j<<" "<<tab[i][j]<<endl;
             }
             else{
-                tab[i][j] = max(get(tab,i-1,j-1), max(get(tab,i-1,j),get(tab,i,j-1)));
+                //tab[i][j] = max(get(tab,i-1,j),get(tab,i,j-1));
+                if(get(tab,i-1,j)>get(tab,i,j-1)){
+                    tab[i][j] = get(tab,i-1,j);
+                    path[i][j] = 1;
+                }
+                else{
+                    tab[i][j] = get(tab,i,j-1);
+                    path[i][j] = 3;
+                }
                 //cout<<i<<" "<<j<<" "<<tab[i][j]<<endl;
             }
         }
@@ -45,6 +56,21 @@ int p_lcs(string a, string b, int n1, int n2){
         else if(iter>=n1 && iter>=n2)
             ns--;
         iter++;
+    }
+    int ci=n1-1,cj=n2-1,it=0;
+    while(ci>=0 && cj>=0){
+        if(path[ci][cj]==2){
+            ci--;
+            cj--;
+            res[it]=a[ci];
+        }
+        else if(path[ci][cj] == 1){
+            ci--;
+        }
+        else{
+            cj--;
+        }
+        it++;
     }
     //cout<<endl;
     /*for(int y=0;y<n1;y++){
@@ -65,12 +91,17 @@ int main(){
 
     getline(cin,s2,'$');
     s2.erase(remove(s2.begin(), s2.end(), '\n'), s2.end());
+    char *res = new char[s1.length()+s2.length()];
     int size;
     if(s1.length() <= s2.length())
-        size=p_lcs(s1,s2,s1.length(),s2.length());
+        size=p_lcs(s1,s2,s1.length(),s2.length(),res);
     else
-        size=p_lcs(s2,s1,s2.length(),s1.length());
+        size=p_lcs(s2,s1,s2.length(),s1.length(),res);
     cout<<size<<endl;
+    for(int i=size-1;i>=0;i--){
+        cout<<res[i];
+    }
+    cout<<endl;
 
 }
 
