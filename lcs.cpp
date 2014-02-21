@@ -11,7 +11,7 @@ inline int get(int** a,int i, int j){
         return 0;
 }
 
-int p_lcs(string a, string b, int n1, int n2, char* res,bool lm){
+int p_lcs(string a, string b, int n1, int n2, char* res, bool lm){
     int** tab = new int*[n1];
     int** path = new int*[n1];
     for(int i=0; i<n1; i++){
@@ -44,6 +44,16 @@ int p_lcs(string a, string b, int n1, int n2, char* res,bool lm){
                     tab[i][j] = get(tab,i-1,j);
                     path[i][j] = 1;
                 }
+                else if(get(tab,i-1,j)==get(tab,i,j-1)){
+                    if(lm){
+                        tab[i][j] = get(tab,i-1,j);
+                        path[i][j] = 1;
+                    }
+                    else{
+                        tab[i][j] = get(tab,i,j-1);
+                        path[i][j] = 3;
+                    }
+                }
                 else{
                     tab[i][j] = get(tab,i,j-1);
                     path[i][j] = 3;
@@ -57,58 +67,29 @@ int p_lcs(string a, string b, int n1, int n2, char* res,bool lm){
             ns--;
         iter++;
     }
-
-    cout<<endl;
-    for(int y=0;y<n1;y++){
+    int ci=n1-1,cj=n2-1,it=0;
+    while(ci>=0 && cj>=0){
+        if(path[ci][cj]==2){
+            res[it]=a[ci];
+            ci--;
+            cj--;
+            it++;
+        }
+        else if(path[ci][cj] == 1){
+            ci--;
+        }
+        else{
+            cj--;
+        }
+    }
+    //cout<<endl;
+    /*for(int y=0;y<n1;y++){
         for(int z=0;z<n2;z++){
             cout<<tab[y][z]<<" ";
         }
         cout<<endl;
     }
-    cout<<endl;
-    for(int y=0;y<n1;y++){
-        for(int z=0;z<n2;z++){
-            cout<<path[y][z]<<" ";
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-
-    int ci=n1-1,cj=n2-1,it=0;
-    if(lm){
-        while(ci>=0 && cj>=0){
-            if(path[ci][cj]==2){
-                res[it]=a[ci];
-                cout<<ci<<" "<<cj<<endl;
-                ci--;
-                cj--;
-                it++;
-            }
-            else if(path[ci][cj] == 1){
-                ci--;
-            }
-            else{
-                cj--;
-            }
-        }
-    }
-    else{
-        while(ci>=0 && cj>=0){
-            if(path[ci][cj]==2){
-                res[it]=a[ci];
-                cout<<ci<<" "<<cj<<endl;
-                ci--;
-                cj--;
-                it++;
-            }
-            else if(path[ci][cj] == 3){
-                cj--;
-            }
-            else{
-                ci--;
-            }
-        }
-    }
+    */
     return tab[n1-1][n2-1];
 }
 
