@@ -11,7 +11,7 @@ inline int get(int** a,int i, int j){
         return 0;
 }
 
-int p_lcs(string a, string b, int n1, int n2, char* res){
+int p_lcs(string a, string b, int n1, int n2, char* res,bool lm){
     int** tab = new int*[n1];
     int** path = new int*[n1];
     for(int i=0; i<n1; i++){
@@ -57,29 +57,58 @@ int p_lcs(string a, string b, int n1, int n2, char* res){
             ns--;
         iter++;
     }
-    int ci=n1-1,cj=n2-1,it=0;
-    while(ci>=0 && cj>=0){
-        if(path[ci][cj]==2){
-            ci--;
-            cj--;
-            res[it]=a[ci];
-        }
-        else if(path[ci][cj] == 1){
-            ci--;
-        }
-        else{
-            cj--;
-        }
-        it++;
-    }
-    //cout<<endl;
-    /*for(int y=0;y<n1;y++){
+
+    cout<<endl;
+    for(int y=0;y<n1;y++){
         for(int z=0;z<n2;z++){
             cout<<tab[y][z]<<" ";
         }
         cout<<endl;
     }
-    */
+    cout<<endl;
+    for(int y=0;y<n1;y++){
+        for(int z=0;z<n2;z++){
+            cout<<path[y][z]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+
+    int ci=n1-1,cj=n2-1,it=0;
+    if(lm){
+        while(ci>=0 && cj>=0){
+            if(path[ci][cj]==2){
+                res[it]=a[ci];
+                cout<<ci<<" "<<cj<<endl;
+                ci--;
+                cj--;
+                it++;
+            }
+            else if(path[ci][cj] == 1){
+                ci--;
+            }
+            else{
+                cj--;
+            }
+        }
+    }
+    else{
+        while(ci>=0 && cj>=0){
+            if(path[ci][cj]==2){
+                res[it]=a[ci];
+                cout<<ci<<" "<<cj<<endl;
+                ci--;
+                cj--;
+                it++;
+            }
+            else if(path[ci][cj] == 3){
+                cj--;
+            }
+            else{
+                ci--;
+            }
+        }
+    }
     return tab[n1-1][n2-1];
 }
 
@@ -94,9 +123,9 @@ int main(){
     char *res = new char[s1.length()+s2.length()];
     int size;
     if(s1.length() <= s2.length())
-        size=p_lcs(s1,s2,s1.length(),s2.length(),res);
+        size=p_lcs(s1,s2,s1.length(),s2.length(),res,true);
     else
-        size=p_lcs(s2,s1,s2.length(),s1.length(),res);
+        size=p_lcs(s2,s1,s2.length(),s1.length(),res,false);
     cout<<size<<endl;
     for(int i=size-1;i>=0;i--){
         cout<<res[i];
