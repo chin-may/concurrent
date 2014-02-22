@@ -93,7 +93,7 @@ int p_lcs(string a, string b, int n1, int n2, char* res, bool lm){
     return tab[n1-1][n2-1];
 }
 
-
+/*
 int main(){
     string s1,s2;
     getline(cin,s1,'$');
@@ -113,6 +113,49 @@ int main(){
     }
     cout<<endl;
 
+}
+*/
+int main(){
+    string tmp;
+    bool more = true;
+    while(more){
+        string s1,s2;
+        while(more){
+            getline(cin,tmp);
+            if(tmp.compare("$$$")==0){
+                more=false;
+            }
+            else if(tmp[0]=='>')
+                continue;
+            else if(tmp[0]=='$')
+                break;
+            else
+                s1.append(tmp);
+        }
+        while(more){
+            getline(cin,tmp);
+            if(tmp[0]=='>')
+                continue;
+            else if(tmp[0]=='$')
+                break;
+            else
+                s2.append(tmp);
+        }
+        if(more){
+            //cout<<"Str1 "<<s1<<"\nStr2 "<<s2<<endl;
+            char *res = new char[s1.length()+s2.length()];
+            int size;
+            if(s1.length() <= s2.length())
+                size=p_lcs(s1,s2,s1.length(),s2.length(),res,true);
+            else
+                size=p_lcs(s2,s1,s2.length(),s1.length(),res,false);
+            cout<<size<<" ";
+            for(int i=size-1;i>=0;i--){
+                cout<<res[i];
+            }
+            cout<<endl;
+        }
+    }
 }
 
 
